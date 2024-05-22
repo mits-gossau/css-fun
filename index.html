@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSS FUN</title>
+    <link rel="preconnect" href="https://rsms.me/">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  </head>
+
+  <style>
+    :root { font-family: 'Inter', sans-serif; }
+    @supports (font-variation-settings: normal) {
+      :root { font-family: 'Inter var', sans-serif; }
+    }
+
+    /* unlayered styles */
+    body {
+      color: #333;
+      background-color: lightgray;
+      font
+    }
+
+    /* creates the first layer: `layout` */
+    @layer layout {
+      main {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+    }
+
+    /* creates the second layer: an unnamed, anonymous layer */
+    @layer {
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+    }
+
+    /* creates the third and fourth layers: `theme` and `utilities` */
+    @layer theme, layout, utilities;
+
+    /* adds styles to the already existing `layout` layer */
+    @layer layout {
+      main {
+        color: #000;
+      }
+    }
+
+    /* creates the fifth layer: an unnamed, anonymous layer */
+    @layer {
+      body {
+        margin: 1vw;
+      }
+    }
+
+    article {
+      border: 1px solid red;
+      padding: 12px;
+    }
+
+    article.has {
+      div {
+        border: 3px green dotted;
+        margin-bottom: 1em;
+      }
+      div:has(p) {
+        border: 3px orange solid;
+      }
+    }
+
+    article.where {
+      :is(a.author) {
+        color: orange;
+      }
+      a.author, a.writer {
+        color: green;
+      }
+      :where(a.author,a.writer) {
+        text-decoration: overline;
+        color: red;
+      }
+    }
+
+    article.container {
+      .post {
+        container-type: inline-size;
+      }
+      /* Default heading styles for the card title */
+      .card h2 {
+        color: blue;
+        font-size: 1em;
+      }
+
+      /* If the container is larger than 700px */
+      @container (min-width: 300px) {
+        .card h2 {
+          color: green;
+          font-size: 2em;
+        }
+      }
+
+      @container (min-width: 700px) {
+        .card h2 {
+          color: pink;
+          font-size: 3em;
+        }
+      }
+    }
+
+    article.focus-visible {
+      input,
+      button {
+        margin: 10px;
+      }
+
+      .focus-only:focus {
+        outline: 2px solid black;
+      }
+
+      .focus-visible-only:focus-visible {
+        outline: 4px dashed darkorange;
+      }
+    }
+
+    article.empty {
+      div:empty {
+        outline: 2px solid teal;
+        height: 1em;
+      }
+    }
+
+    article.aspect-ratio > div {
+      display: grid;
+      aspect-ratio: 16/9;
+      border: 1px solid green;
+      place-items: center;
+    }
+    
+    article.new-colors {
+      .lab {
+        color: lab(29.2345% 39.3825 20.0664);
+      }
+      .lcb {
+        color: lch(52.2345% 72.2 56.2 / .5);
+      }
+    }
+
+    article.modal {
+      button {
+        font-size: 1.2rem;
+        padding: 5px 15px;
+      }
+
+      dialog::backdrop {
+        width: 500px;
+        background-color: hotpink;
+      }
+      
+      :modal {
+        background-color: beige;
+        border: 2px solid burlywood;
+        border-radius: 5px;
+        height: 100dvh;
+      }
+    }
+
+    article.accent-color {
+      input {
+        accent-color: auto;
+        display: block;
+        width: 30px;
+        height: 30px;
+      }
+
+      input.custom {
+        accent-color: salmon;
+      }
+    }
+
+    article.media-hover {
+      /* default hover effect */
+      a:hover {
+        color: black;
+        background: yellow;
+      }
+
+      p {
+        display: none;
+      }
+
+      @media (hover: hover) {
+        /* when hover is supported */
+        a:hover {
+          color: white;
+          background: black;
+        }
+
+        p {
+          display: block;
+        }
+      }
+    }
+
+    article.subgrid {
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(9, 1fr);
+        grid-template-rows: repeat(4, minmax(100px, auto));
+        background-color: lightgreen;
+      }
+
+      .item {
+        display: grid;
+        grid-column: 2 / 7;
+        grid-row: 2 / 4;
+        grid-template-columns: subgrid;
+        grid-template-rows: subgrid;
+        background-color: orange;
+      }
+
+      .subitem {
+        grid-column: 3 / 5;
+        grid-row: 1 / 2;
+        background-color: lightblue;
+      }
+    }
+
+    .text-wrap {
+      text-align:center;
+    }
+    .text-wrap__with {
+          text-wrap: balance;
+      }
+
+      .logical {
+        p {
+          display: inline-flex;
+          align-items: center;
+          font-weight: bold;
+          font-size: 1.5em;
+          padding: 0.5em;
+          background: #f3f3f3;
+          border: 1px solid var(--color-stroke);
+        }
+
+p svg {
+  width: 1.2em;
+  height: 1.2em;
+  margin-right: 0.5em;
+  flex: none;
+  fill: var(--color-primary);
+}
+
+      }
+
+      :root {
+  --direction: ltr;
+}
+
+.sample {
+  direction: var(--direction);
+}
+
+.sample p {
+  display: inline-flex;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.5em;
+  padding: 0.5em;
+  background: #f3f3f3;
+  border: 1px solid var(--color-stroke);
+}
+
+.sample p svg {
+  width: 1.2em;
+  height: 1.2em;
+  margin-inline-end: 0.5em;
+  flex: none;
+  fill: var(--color-primary);
+}
+
+
+  </style>
+  <body>
+    
+    <article class="text-wrap">
+      <h2>Text-Wrap Balance</h2>
+      <div>
+        <h1>Das ist ein sehr langer Text der eigentlich umbrechen sollte!! Ohne Text-Wrap</h1>
+        <h1 class="text-wrap__with">Das ist ein sehr langer Text der eigentlich umbrechen sollte!! Mit Text-Wrap</h1>
+      </div>
+    </article>
+    <article class="has">
+      <h2>:has()</h2>
+      <div>
+        <p>div has p</p\>
+      </div>
+      <div>
+        div has no p
+      </div>
+    </article>
+    <article class="where">
+      <h2>:where</h2>
+      <p><a href="https://example.org">User agent styles</a></p>
+      <p><a href="https://example.org" class="author">Author styles (color: orange; by :is(a.writer) selector, :where has specificity 0 and does not apply color: red;)</a></p>
+      <p><a href="https://example.org" class="writer">Writer styles (color: green; by a.writer selector), :where has specificity 0 and does not apply color: red;</a></p>
+    </article>
+    <article class="container">
+      <h2>Container-Queries</h2>
+      <div class="post">
+        <div class="card">
+          <h2>Card title</h2>
+          <p>Card content</p>
+        </div>
+      </div>
+      <input type="range" id="range" name="range" min="0" max="750" />
+      <script>
+        const range = document.querySelector('#range')
+        const post = document.querySelector('.container > .post')
+        range.addEventListener("change", event => (post.style.width = range.value + 'px'))
+      </script>
+    </article>
+    <article class="new-colors">
+      <h2>New Colors lab() and lch()</h2>
+      <p class="lab">The lab() functional notation expresses a given color in the CIE L*a*b* color space. LAB can be useful in color manipulation and transformation tasks.</p>
+      <p class="lcb">The LCH color model stands for Lightness, Chroma, and Hue.</p>
+    </article>
+
+    <article class="subgrid">
+      <h2>Subgrid usage</h2>
+      <div class="grid"> Main grid container
+        <div class="item"> grid item and subgrid container
+          <div class="subitem">subgrid item</div>
+        </div>
+      </div>
+      
+    </article>
+
+    <article class="empty">
+      <h2>:empty pseudo-class</h2>
+      <p>Element with no content:</p>
+      <div></div>
+
+      <p>Element with comment:</p>
+      <div><!-- Simple Comment --></div>
+
+      <p>Element with nested empty element:</p>
+      <div><p></p></div>
+    </article>
+
+    <article class="media-hover">
+      <h2>@media(hover)</h2>
+
+      <a href="#">Try hovering over me! If the background becomes black your device supports hovering</a>
+
+      <p>Your device supports hover</p>
+    </article>
+
+    <article class="focus-visible">
+      <h2>:focus-visible</h2>
+      <input type="text" value="Default styles" /><br />
+      <button>Default styles</button><br />
+
+      <input class="focus-only" type="text" value=":focus" /><br />
+      <button class="focus-only">:focus</button><br />
+
+      <input class="focus-visible-only" type="text" value=":focus-visible" /><br />
+      <button class="focus-visible-only">:focus-visible</button>
+    </article>
+
+    <article class="aspect-ratio">
+      <h2>aspect-ratio not only on images</h2>
+      <div>
+        I'm a 16/9 aspect-ratio baby
+      </div>
+    </article>
+
+    <article class="modal">
+      <h2>:modal and ::backdrop pseudo-class</h2>
+      <button id="showDialogButton">Show a dialog</button>
+
+      <dialog id="favDialog">
+        <form method="dialog">
+          <p>The background shown outside of this dialog is a backdrop.</p>
+          <p>The modal itself is using the new 100dvh view port unit</p>
+          <p>100dvh adapts itself to be either the large or small viewport size.</p>
+          <button id="confirmButton">Close the dialog</button>
+        </form>
+      </dialog>
+    </article>
+    
+
+<article class="logical">
+  <h2>Logical properties</h2>
+  <article class="flow">
+    <label class="toggle" for="toggle-element">
+      <span class="toggle__label">Toggle direction</span>
+      <input type="checkbox" role="switch" class="toggle__element" id="toggle-element" />
+      <div class="toggle__decor" aria-hidden="true">
+        <div class="toggle__thumb"></div>
+      </div>
+    </label>
+    <div class="sample">
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M19,5h-2V3H7v2H5C3.9,5,3,5.9,3,7v1c0,2.55,1.92,4.63,4.39,4.94c0.63,1.5,1.98,2.63,3.61,2.96V19H7v2h10v-2h-4v-3.1 c1.63-0.33,2.98-1.46,3.61-2.96C19.08,12.63,21,10.55,21,8V7C21,5.9,20.1,5,19,5z M5,8V7h2v3.82C5.84,10.4,5,9.3,5,8z M12,14 c-1.65,0-3-1.35-3-3V5h6v6C15,12.65,13.65,14,12,14z M19,8c0,1.3-0.84,2.4-2,2.82V7h2V8z" />
+        </svg>
+        <span>CSS is really good</span>
+      </p>
+    </div>
+  </article>
+
+</article>
+    
+    <article class="accent-color">
+      <h2>Accent-color property</h2>
+
+      <input type="checkbox" checked />
+      <input type="checkbox" class="custom" checked />
+    </article>
+  </body>
+
+  <script>
+    const showDialogButton = document.getElementById('showDialogButton');
+    const favDialog = document.getElementById('favDialog');
+
+    showDialogButton.addEventListener('click', () => favDialog.showModal());
+
+
+    const toggle = document.querySelector('#toggle-element');
+
+toggle.addEventListener('change', evt => {
+  document.documentElement.style.setProperty(
+    '--direction',
+    evt.target.checked ? 'rtl' : 'ltr'
+  );
+});
+  </script>
+</html>
